@@ -1,25 +1,28 @@
-# Terraform Demo: Integrating AWS CloudFront, Elemental MediaPackage, and Secrets Manager for Secure Content Delivery
+# Secure Content Delivery on AWS Using CloudFront, MediaPackage, and Secrets Manager
 
-## This will enhances security by ensuring that only requests with valid and authorized identifiers can access and distribute media content.
+This project demonstrates how to securely deliver media content using AWS services such as CloudFront, Elemental MediaPackage, IAM, and Secrets Manager. It enhances security by validating incoming requests through custom headers and secret validation, ensuring only authorized clients can access protected content.
+
+## 📦 Architecture Overview
+
+The solution uses the following AWS services:
+
+- **AWS CloudFront**: Acts as the CDN layer to serve content with low latency and high availability.
+- **AWS Elemental MediaPackage**: Serves as the origin for media content and enforces request validation.
+- **AWS Secrets Manager**: Stores and manages secrets (tokens/identifiers) securely.
+- **AWS IAM**: Manages permissions between services to ensure secure secret access.
+
+### 🔒 Secure Workflow
+
+1. A **playback device** initiates a content request through **CloudFront**.
+2. CloudFront forwards the request to **MediaPackage**, including a custom HTTP header like:
 
 
-```bash
-Overview
-The process involves the following steps:
+3. MediaPackage retrieves the corresponding secret from **Secrets Manager** via **IAM** authorization.
+4. MediaPackage **verifies** the secret matches the header value.
+5. If valid, it responds with the requested media content (`HTTP 200 OK`). Otherwise, access is denied.
 
-AWS CloudFront serves as the entry point, distributing content to end-users with high availability and security.
-AWS Elemental MediaPackage acts as the origin server, packaging content dynamically to optimize for different devices. It plays a crucial role in verifying that requests are authenticated using custom headers.
-Custom HTTP Headers: These are utilized to carry authentication tokens or identifiers that are crucial for securing communication between CloudFront and MediaPackage.
-AWS Secrets Manager: This service manages the secrets (like API keys or tokens) that are used in the custom HTTP headers. It ensures that sensitive information is stored securely and is accessible only through proper authentication mechanisms.
-AWS IAM (Identity and Access Management): This controls the permissions and access policies that secure interactions between the different AWS services involved in the process.
-How It Works
-When a playback request is initiated by a user:
+> 🔐 This pattern ensures that only clients presenting a valid secret can stream the content.
 
-The request first hits AWS CloudFront, which then forwards it to AWS Elemental MediaPackage with a custom header containing a secret identifier.
-Elemental MediaPackage consults AWS Secrets Manager to validate that the secret in the custom header matches a secure, stored value.
-Once validated, MediaPackage processes the request, ensuring that only authenticated requests receive content, thus maintaining a high level of security.
-
-```
 
 
 ## This is the process we'll achieve.
