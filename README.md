@@ -14,8 +14,7 @@ The solution uses the following AWS services:
 ### 🔒 Secure Workflow
 
 1. A **playback device** initiates a content request through **CloudFront**.
-2. CloudFront forwards the request to **MediaPackage**, including a custom HTTP header like:
-                                                                    X-MediaPackage-CDNIdentifier: <Secret-Identifier>
+2. CloudFront forwards the request to **MediaPackage**, including a custom HTTP header like: X-MediaPackage-CDNIdentifier: <Secret-Identifier>
 
 3. MediaPackage retrieves the corresponding secret from **Secrets Manager** via **IAM** authorization.
 4. MediaPackage **verifies** the secret matches the header value.
